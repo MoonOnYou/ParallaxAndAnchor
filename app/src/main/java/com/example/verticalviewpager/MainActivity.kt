@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     var toolbar : androidx.appcompat.widget.Toolbar? = null
 
 
+    var isSelected : Boolean = false
+
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,40 +45,45 @@ class MainActivity : AppCompatActivity() {
         inflaterToAddView()
 
         scrollable?.viewTreeObserver?.addOnScrollChangedListener {
-            Log.i("dkdkdkdkdkdkdkdkd","dkdkdkdkdkdkdkd")
-            Log.i("dkdkdkdkdkdkdkdkd","${scrollable?.scrollY.toString()}")
 
-            when(scrollable?.scrollY) {
-                0 -> {
-                    layoutTab?.visibility = View.GONE
-                    textViewHotelTitle?.visibility = View.GONE
-                    toolbar?.setBackgroundColor(getColor(R.color.tr))
+            if (isSelected) {
+                if (scrollable?.scrollY == recycler?.get(0)?.y!!.toInt() + 1) {
+                        isSelected = false
                 }
+            } else {
 
-                in recycler?.get(0)?.y!!.toInt() ..recycler?.get(1)?.y!!.toInt()-> {
-                    layoutTab?.visibility = View.VISIBLE
-                    tab1?.setBackgroundColor(getColor(R.color.white))
-                    tab2?.setBackgroundColor(getColor(R.color.purple_500))
-                    tab3?.setBackgroundColor(getColor(R.color.purple_500))
-                    textViewHotelTitle?.visibility = View.VISIBLE
-                    toolbar?.setBackgroundColor(getColor(R.color.white))
-                }
+                when (scrollable?.scrollY) {
+                    0 -> {
+                        layoutTab?.visibility = View.GONE
+                        textViewHotelTitle?.visibility = View.GONE
+                        toolbar?.setBackgroundColor(getColor(R.color.tr))
+                    }
 
-                in recycler?.get(1)?.y!!.toInt() ..recycler?.get(2)?.y!!.toInt()-> {
-                    layoutTab?.visibility = View.VISIBLE
-                    tab1?.setBackgroundColor(getColor(R.color.purple_500))
-                    tab2?.setBackgroundColor(getColor(R.color.white))
-                    tab3?.setBackgroundColor(getColor(R.color.purple_500))
-                    textViewHotelTitle?.visibility = View.VISIBLE
-                    toolbar?.setBackgroundColor(getColor(R.color.white))
-                }
-                in recycler?.get(2)?.y!!.toInt() .. (recycler?.get(2)?.y!!.toInt() + recycler?.get(2)?.height!!) -> {
-                    layoutTab?.visibility = View.VISIBLE
-                    tab1?.setBackgroundColor(getColor(R.color.purple_500))
-                    tab2?.setBackgroundColor(getColor(R.color.purple_500))
-                    tab3?.setBackgroundColor(getColor(R.color.white))
-                    textViewHotelTitle?.visibility = View.VISIBLE
-                    toolbar?.setBackgroundColor(getColor(R.color.white))
+                    in recycler?.get(0)?.y!!.toInt()..recycler?.get(1)?.y!!.toInt() - 1 -> {
+                        layoutTab?.visibility = View.VISIBLE
+                        tab1?.setBackgroundColor(getColor(R.color.white))
+                        tab2?.setBackgroundColor(getColor(R.color.purple_500))
+                        tab3?.setBackgroundColor(getColor(R.color.purple_500))
+                        textViewHotelTitle?.visibility = View.VISIBLE
+                        toolbar?.setBackgroundColor(getColor(R.color.white))
+                    }
+
+                    in recycler?.get(1)?.y!!.toInt()..recycler?.get(2)?.y!!.toInt() - 1 -> {
+                        layoutTab?.visibility = View.VISIBLE
+                        tab1?.setBackgroundColor(getColor(R.color.purple_500))
+                        tab2?.setBackgroundColor(getColor(R.color.white))
+                        tab3?.setBackgroundColor(getColor(R.color.purple_500))
+                        textViewHotelTitle?.visibility = View.VISIBLE
+                        toolbar?.setBackgroundColor(getColor(R.color.white))
+                    }
+                    in recycler?.get(2)?.y!!.toInt()..(recycler?.get(2)?.y!!.toInt() + recycler?.get(2)?.height!!) - 1 -> {
+                        layoutTab?.visibility = View.VISIBLE
+                        tab1?.setBackgroundColor(getColor(R.color.purple_500))
+                        tab2?.setBackgroundColor(getColor(R.color.purple_500))
+                        tab3?.setBackgroundColor(getColor(R.color.white))
+                        textViewHotelTitle?.visibility = View.VISIBLE
+                        toolbar?.setBackgroundColor(getColor(R.color.white))
+                    }
                 }
             }
         }
@@ -120,9 +128,10 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     val clickListener = View.OnClickListener { v ->
+        isSelected = true
         when(v.id) {
             R.id.tab1 -> {
-                scrollable?.smoothScrollTo(0, recycler?.get(0)?.y!!.toInt())
+                scrollable?.smoothScrollTo(0, recycler?.get(0)?.y!!.toInt() + 1)
                 tab1?.setBackgroundColor(getColor(R.color.white))
                 tab2?.setBackgroundColor(getColor(R.color.purple_500))
                 tab3?.setBackgroundColor(getColor(R.color.purple_500))
